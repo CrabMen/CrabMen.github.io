@@ -32,7 +32,7 @@
 <meta property="og:image" content="http://yoursite.com/./1473345819184.png">
 <meta property="og:image" content="http://yoursite.com/./1473346633494.png">
 <meta property="og:image" content="http://yoursite.com/./1473346717295.png">
-<meta property="og:updated_time" content="2016-09-15T12:16:13.000Z">
+<meta property="og:updated_time" content="2016-09-15T12:20:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS - SDK开发">
 <meta name="twitter:image" content="http://yoursite.com/./1473172037388.png">
@@ -313,15 +313,13 @@
       
           
         <p><excerpt in="" index="" |="" 首页摘要=""><br><a id="more"></a></excerpt></p>
-<p>#iOS-SDK开发</p>
-<p>###什么是库？<br>库是共享程序代码的方式，一般分为动态库和静态库。</p>
+<h1 id="iOS-SDK开发"><a href="#iOS-SDK开发" class="headerlink" title="iOS-SDK开发"></a>iOS-SDK开发</h1><h3 id="什么是库？"><a href="#什么是库？" class="headerlink" title="什么是库？"></a>什么是库？</h3><p>库是共享程序代码的方式，一般分为动态库和静态库。</p>
 <ul>
 <li>静态库：.a和.framework</li>
 <li>动态库：.dylib和.framework</li>
 </ul>
 <p>在实际的项目开发中，经常会使用到库，库分为静态库和动态库两种。和多数人所熟悉的动态语言和静态语言一样，这里的所谓静态和动态是相对编译期和运行期的：静态库在程序编译时会被链接到目标代码中，程序运行时将不再需要改静态库；而动态库在程序编译时并不会被链接到目标代码中，只是在程序运行时才被载入，因为在程序运行期间还需要动态库的存在。</p>
-<p>###静态库和动态库区别</p>
-<ul>
+<h3 id="静态库和动态库区别"><a href="#静态库和动态库区别" class="headerlink" title="静态库和动态库区别"></a>静态库和动态库区别</h3><ul>
 <li>静态库：链接时，静态库会被完整的复制到可执行文件中，被多次使用就又多份冗余拷贝</li>
 <li>动态库：链接时不复制，程序运行时由系统动态加载到内存，供程序调用，系统只会加载一次，多个程序共用，节省内存</li>
 </ul>
@@ -334,12 +332,11 @@
 <li><p>.a + .h + sourceFile = .framework。</p>
 </li>
 </ul>
-<p>###静态库的应用场景</p>
-<ul>
+<h3 id="静态库的应用场景"><a href="#静态库的应用场景" class="headerlink" title="静态库的应用场景"></a>静态库的应用场景</h3><ul>
 <li>希望更多的开发者在程序中集成，但是又不想公布自己的核心技术；对外暴露统一接口，开发者调用静态库即可。</li>
 <li>项目开发中有一部分核心代码，非核心开发人员倘若离职，对于公司来说是一种损失</li>
 </ul>
-<p>###1 .a静调库的编译<br><img src="./1473172037388.png" alt="Alt text"></p>
+<h3 id="1-a静调库的编译"><a href="#1-a静调库的编译" class="headerlink" title="1 .a静调库的编译"></a>1 .a静调库的编译</h3><p><img src="./1473172037388.png" alt="Alt text"></p>
 <ol>
 <li>静态库的创建:左侧为.framework 右侧为.a</li>
 <li>创建工具类，并暴露接口<br>新建工具类，并在buildPhrase中添加需要暴露的.h文件 </li>
@@ -354,7 +351,7 @@
 </ol>
 <p><img src="./7072B0CA-CBD0-4589-ADBB-1F06CD6191E1.png" alt="Alt text"></p>
 <p>在不同的文件夹下可以查看不同环境使用的.a静调库文件，新建项目，将.a文件拖拽到项目中估计可使用<br><img src="./1473173681868.png" alt="Alt text"></p>
-<p>###静态库中的架构问题<br>当使用真机环境的.a文件在模拟中编译或者运行时，会报架构的错误 。</p>
+<h3 id="静态库中的架构问题"><a href="#静态库中的架构问题" class="headerlink" title="静态库中的架构问题"></a>静态库中的架构问题</h3><p>当使用真机环境的.a文件在模拟中编译或者运行时，会报架构的错误 。</p>
 <ul>
 <li><p>设备的CPU架构</p>
 <ul>
@@ -418,8 +415,7 @@
 <p>创建完成以后，项目中的结构发生变化，变化的位置已经已经圈出</p>
 <p><img src="./1473346717295.png" alt="Alt text"></p>
 <p>在framework文件目录下创建核心代码类，并在项目中需要的地方import主头文件，静调库的制作就不赘述了，与上面的一致。</p>
-<p>###4 制作静态库时注意的几点：</p>
-<ol>
+<h3 id="4-制作静态库时注意的几点："><a href="#4-制作静态库时注意的几点：" class="headerlink" title="4 制作静态库时注意的几点："></a>4 制作静态库时注意的几点：</h3><ol>
 <li><p>图片资源的处理：两种静态库，一般都是把图片文件单独的放在一个.bundle文件中，一般.bundle的名字和.a或.framework的名字相同。.bundle文件很好弄，新建一个文件夹，把它改名为.bundle就可以了，右键，显示包内容可以向其中添加图片资源。</p>
 </li>
 <li><p>category是我们实际开发项目中经常用到的，把category打成静态库是没有问题的，但是在用这个静态库的工程中，调用category中的方法时会有找不到该方法的运行时错误（selector not recognized），解决办法是：在使用静态库的工程中配置other linker flags的值为-ObjC  -all_load</p>
@@ -436,7 +432,7 @@
         <p><span>本文标题:</span><a href="/2016/09/15/Untitled Document/">iOS - SDK开发</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">CrabMan</a></p>
         <p><span>发布时间:</span>2016-09-15, 20:12:38</p>
-        <p><span>最后更新:</span>2016-09-15, 20:16:13</p>
+        <p><span>最后更新:</span>2016-09-15, 20:20:27</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2016/09/15/Untitled Document/" title="iOS - SDK开发">http://yoursite.com/2016/09/15/Untitled Document/</a>
             <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2016/09/15/Untitled Document/　　作者: CrabMan" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
@@ -466,7 +462,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#a和-framewrok有什么区别？"><span class="toc-number">1.</span> <span class="toc-text">.a和.framewrok有什么区别？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何使静调库支持多种模拟器"><span class="toc-number">2.</span> <span class="toc-text">如何使静调库支持多种模拟器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-framework静态库的编译"><span class="toc-number">3.</span> <span class="toc-text">2 .framework静态库的编译</span></a></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#iOS-SDK开发"><span class="toc-number">1.</span> <span class="toc-text">iOS-SDK开发</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是库？"><span class="toc-number">1.0.1.</span> <span class="toc-text">什么是库？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#静态库和动态库区别"><span class="toc-number">1.0.2.</span> <span class="toc-text">静态库和动态库区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#a和-framewrok有什么区别？"><span class="toc-number">1.0.3.</span> <span class="toc-text">.a和.framewrok有什么区别？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#静态库的应用场景"><span class="toc-number">1.0.4.</span> <span class="toc-text">静态库的应用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-a静调库的编译"><span class="toc-number">1.0.5.</span> <span class="toc-text">1 .a静调库的编译</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#静态库中的架构问题"><span class="toc-number">1.0.6.</span> <span class="toc-text">静态库中的架构问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何使静调库支持多种模拟器"><span class="toc-number">1.0.7.</span> <span class="toc-text">如何使静调库支持多种模拟器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-framework静态库的编译"><span class="toc-number">1.0.8.</span> <span class="toc-text">2 .framework静态库的编译</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-制作静态库时注意的几点："><span class="toc-number">1.0.9.</span> <span class="toc-text">4 制作静态库时注意的几点：</span></a></li></ol></li></ol></li></ol>
         
     </div>
     <style>
