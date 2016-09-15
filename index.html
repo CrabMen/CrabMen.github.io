@@ -271,6 +271,173 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Untitled Document" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/09/15/Untitled Document/" class="article-date">
+      <time datetime="2016-09-15T12:12:38.000Z" itemprop="datePublished">2016-09-15</time>
+</a>
+
+ 
+    <a href="/2016/09/15/Untitled Document/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+            <span class="ds-thread-count"  data-thread-key="2016/09/15/Untitled Document/" ></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2016/09/15/Untitled Document/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>#iOS-SDK开发</p>
+<p>###什么是库？<br>库是共享程序代码的方式，一般分为动态库和静态库。</p>
+<ul>
+<li>静态库：.a和.framework</li>
+<li>动态库：.dylib和.framework</li>
+</ul>
+<p>在实际的项目开发中，经常会使用到库，库分为静态库和动态库两种。和多数人所熟悉的动态语言和静态语言一样，这里的所谓静态和动态是相对编译期和运行期的：静态库在程序编译时会被链接到目标代码中，程序运行时将不再需要改静态库；而动态库在程序编译时并不会被链接到目标代码中，只是在程序运行时才被载入，因为在程序运行期间还需要动态库的存在。</p>
+<p>###静态库和动态库区别</p>
+<ul>
+<li>静态库：链接时，静态库会被完整的复制到可执行文件中，被多次使用就又多份冗余拷贝</li>
+<li>动态库：链接时不复制，程序运行时由系统动态加载到内存，供程序调用，系统只会加载一次，多个程序共用，节省内存</li>
+</ul>
+<p><strong>注意:</strong>项目中如果使用了自制的动态库(framework)不能被上传到AppStore</p>
+<h3 id="a和-framewrok有什么区别？"><a href="#a和-framewrok有什么区别？" class="headerlink" title=".a和.framewrok有什么区别？"></a>.a和.framewrok有什么区别？</h3><ul>
+<li><p>.a是一个纯二进制文件，.framework是一个文件夹，文件夹中除了有二进制文件之外还有资源文件。</p>
+</li>
+<li><p>.a文件不能直接使用，至少要有.h文件配合，.framework文件可以直接使用。</p>
+</li>
+<li><p>.a + .h + sourceFile = .framework。</p>
+</li>
+</ul>
+<p>###静态库的应用场景</p>
+<ul>
+<li>希望更多的开发者在程序中集成，但是又不想公布自己的核心技术；对外暴露统一接口，开发者调用静态库即可。</li>
+<li>项目开发中有一部分核心代码，非核心开发人员倘若离职，对于公司来说是一种损失</li>
+</ul>
+<p>###1 .a静调库的编译<br><img src="./1473172037388.png" alt="Alt text"></p>
+<ol>
+<li>静态库的创建:左侧为.framework 右侧为.a</li>
+<li>创建工具类，并暴露接口<br>新建工具类，并在buildPhrase中添加需要暴露的.h文件 </li>
+</ol>
+<p><img src="./1473173155312.png" alt="Alt text"></p>
+<ol>
+<li>分别在不同的环境下编译，从而得到支持不同环境的静调库</li>
+</ol>
+<p><img src="./81450621-2E68-4CBC-BB4C-4AE7BFA077B6.png" alt="Alt text"></p>
+<ol>
+<li>查看支持真机以及模拟器的静调库 </li>
+</ol>
+<p><img src="./7072B0CA-CBD0-4589-ADBB-1F06CD6191E1.png" alt="Alt text"></p>
+<p>在不同的文件夹下可以查看不同环境使用的.a静调库文件，新建项目，将.a文件拖拽到项目中估计可使用<br><img src="./1473173681868.png" alt="Alt text"></p>
+<p>###静态库中的架构问题<br>当使用真机环境的.a文件在模拟中编译或者运行时，会报架构的错误 。</p>
+<ul>
+<li><p>设备的CPU架构</p>
+<ul>
+<li>不同的设备使用的CPU不同</li>
+<li>CPU的不同就造成使用的CPU架构（即指令集）不同</li>
+</ul>
+</li>
+<li><p>静态库有其支持的CPU架构</p>
+<ul>
+<li>如果静态库在其不支持的CPU架构上面运行就会报错</li>
+</ul>
+</li>
+<li><p>模拟器使用的CPU架构</p>
+<ul>
+<li>iPhone4s-iPhone5：i386</li>
+<li>iPhone5s-iPhone6Plus：x86_64</li>
+</ul>
+</li>
+<li><p>真机使用的CPU架构</p>
+<ul>
+<li>iPhone3gs-iPhone4sP：armv7</li>
+<li>iPhone5-iPhone5c：armv7s</li>
+<li>iPhone5s-iPhone6plus：arm64</li>
+<li><strong>注意:</strong> 支持armv7的静态库可以在armv7s上正常使用</li>
+</ul>
+</li>
+<li><p>查看静态库的架构（终端命令）</p>
+<figure class="highlight plain"><figcaption><span>lipo -info 静态库地址```</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">* 合并静态库</div><div class="line">```$ lipo create 静态库1 静态库2 output 合并后的静态库</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="如何使静调库支持多种模拟器"><a href="#如何使静调库支持多种模拟器" class="headerlink" title="如何使静调库支持多种模拟器"></a>如何使静调库支持多种模拟器</h3><p>想要制作的静态库既支持i386架构也支持x86_64架构，有两种解决方法.</p>
+<ol>
+<li>修改静态库的编译环境<br><img src="./1473175327505.png" alt="Alt text"></li>
+<li>在termnal中使用命令将多个静态库合并<br><code>$ lipo -create Debug-iphoneos/libStaticLibrary.a Debug-iphonesimulator/libStaticLibrary.a -output libnewstatic.a</code></li>
+</ol>
+<p>合并后的静调库的大小&gt;=合并之前静态库大小之和</p>
+<p>开发环境：需要支持真机以及模拟器的静态库<br>生产环境：只需要支持真机的静态库即可</p>
+<h3 id="2-framework静态库的编译"><a href="#2-framework静态库的编译" class="headerlink" title="2 .framework静态库的编译"></a>2 .framework静态库的编译</h3><p>第一步与.a文件文件创建一样，选择framework，点开以后发现，项目中已经存在一个与项目名称一样的主头文件（这是苹果推荐的方式 ）</p>
+<ol>
+<li>将需要暴露的头文件添加到public（拖入即可）</li>
+</ol>
+<p><img src="./1473344686098.png" alt="Alt text"></p>
+<p><strong>注意:</strong>将需要暴露的头文件放到主头文件中 </p>
+<ol>
+<li>步骤跟.a文件一致，分别在真机以及模拟器环境编译，得到两个不同环境的.framework</li>
+</ol>
+<p><img src="./1473344799156.png" alt="Alt text"></p>
+<ol>
+<li>使用.framework并运行 </li>
+</ol>
+<p><img src="./F80D8895-DAE4-4BB5-851B-5828CF91CAF2.png" alt="Alt text"></p>
+<p>查看控制台发现报错，发现制作的framework为动态库，动态库的使用，需要在target中手动添加动态库。（只能作为测试使用，苹果禁止自制的动态库上架）<br>4.修改编译环境，编译静态库<br>buildsetting 搜索mach 并修改</p>
+<p><img src="./1473345314595.png" alt="Alt text"></p>
+<p>使用该方法制作的静态库，可以运行，但是在4s中是无法运行的，会报CPU架构的错误，通过<code>$lipo -info StaticFramework</code>查看framework所支持的架构，目前这样制作的framework只支持x86架构，因此4s不能运行<br><strong> 注意 :</strong>cd 到.framework的路径是不够的，因为仅仅是一个文件夹，真正的静态库是一个二进制文件.因此查看架构信息的时候需要跟这个静态库名字</p>
+<p>修改架构，使制作的framework支持所有架构</p>
+<p><img src="./1473345819184.png" alt="Alt text"></p>
+<p>静调库的合并与.a文件一样，在此就不做赘述。<br>至此SDK的开发就到此为止，真正的SDK开发需要在项目中一边开发一边调试</p>
+<p>###3 SDK静调库的调试</p>
+<p>单独进行核心代码SDK的开发，开发完成以后需要拖到项目中调试，这样是本末倒置的。SDK的开发需要在项目中调试以及开发。</p>
+<p><img src="./1473346633494.png" alt="Alt text"></p>
+<p>创建完成以后，项目中的结构发生变化，变化的位置已经已经圈出</p>
+<p><img src="./1473346717295.png" alt="Alt text"></p>
+<p>在framework文件目录下创建核心代码类，并在项目中需要的地方import主头文件，静调库的制作就不赘述了，与上面的一致。</p>
+<p>###4 制作静态库时注意的几点：</p>
+<ol>
+<li><p>图片资源的处理：两种静态库，一般都是把图片文件单独的放在一个.bundle文件中，一般.bundle的名字和.a或.framework的名字相同。.bundle文件很好弄，新建一个文件夹，把它改名为.bundle就可以了，右键，显示包内容可以向其中添加图片资源。</p>
+</li>
+<li><p>category是我们实际开发项目中经常用到的，把category打成静态库是没有问题的，但是在用这个静态库的工程中，调用category中的方法时会有找不到该方法的运行时错误（selector not recognized），解决办法是：在使用静态库的工程中配置other linker flags的值为-ObjC  -all_load</p>
+</li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
